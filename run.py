@@ -53,7 +53,12 @@ def validate_plate():
 validate_plate()
 
 def validate_initial_mileage():
-    initial_mileage = float(input("Please enter your initial mileage (e.g. 10000):"))
+    """
+    validate if initial mileage input is reasonable
+    more than 200.000 kilometers are unlikely
+    """
+
+    initial_mileage = float(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
 
     if initial_mileage > 200000:
         print(f"Your initial mileage is {initial_mileage}")

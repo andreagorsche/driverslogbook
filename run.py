@@ -36,10 +36,11 @@ def validate_plate():
     the characters for each type (regular and custom) are 8 (min) to 10 (max) including two dashes
     """
     num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
-    valid_aut = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
+    valid_aut = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", num_plate)
 
     if valid_aut:
         print("The number plate is of regular format. Entry correct.")
     else:
         print("invalid entry, please try again")
 
+validate_plate()

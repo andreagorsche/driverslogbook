@@ -90,3 +90,25 @@ def validate_current_mileage():
             break
 
 validate_current_mileage()
+
+#import datetime to validate date entry
+
+from datetime import datetime
+
+def check_valid_date():
+    """
+    check if entered date is in the format dd/mm/yyyy
+    """
+    date_input = input("Please enter your travel date (format: dd/mm/yyyy):")
+    format_ddmmyyyy = "%d/%m/%Y"
+    while True:
+        try:
+            travel_date = datetime.strptime(date_input, format_ddmmyyyy)
+            print("The string is a date with format " + format_ddmmyyyy)
+            break
+        except ValueError:
+            print("The string is not a date with format " + format_ddmmyyyy)
+            print("Please try again")
+            continue
+
+check_valid_date()

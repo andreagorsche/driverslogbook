@@ -35,7 +35,7 @@ def validate_plate():
     the custom Austrian plate type is: Letters, Letters, Numbers
     the characters for each type (regular and custom) are 8 (min) to 10 (max) including two dashes
     """
-   while True:
+    while True:
         num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
         valid_aut_1 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", num_plate)
         valid_aut_2 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[A-Z]{1,5}-[0-9]{1,5}$", num_plate)
@@ -51,3 +51,14 @@ def validate_plate():
             continue
 
 validate_plate()
+
+def validate_initial_mileage():
+    initial_mileage = float(input("Please enter your initial mileage (e.g. 10000):"))
+
+    if initial_mileage > 200000:
+        print(f"Your initial mileage is {initial_mileage}")
+        print("This is an unusual high value. Are you sure this is correct?")
+    else:
+        print("Thank you for your data entry.")
+      
+validate_initial_mileage()

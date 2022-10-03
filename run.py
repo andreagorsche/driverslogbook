@@ -52,18 +52,41 @@ def validate_plate():
 
 validate_plate()
 
+initial_mileage = float(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
+
 def validate_initial_mileage():
     """
     validate if initial mileage input is reasonable
     more than 200.000 kilometers are unlikely
     """
-
-    initial_mileage = float(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
-
     if initial_mileage > 200000:
         print(f"Your initial mileage is {initial_mileage}")
         print("This is an unusual high value. Are you sure this is correct?")
     else:
         print("Thank you for your data entry.")
-      
+    
 validate_initial_mileage()
+
+
+def validate_current_mileage():
+    """   
+    validate if current total mileage is bigger than initial mileage
+    validate if driven kilometers are manageable within a day
+    (assumption that one will most likely not drive more than 1500 kilometer a day)
+    """  
+    while True:
+        current_mileage = float(input("Please enter your total mileage after your recent ride:"))
+        mileage_difference = current_mileage - initial_mileage
+        if  ((mileage_difference) < 0):
+            print("Your total mileage after your trip is smaller than before.")
+            print("Please check your data entry.")
+            continue
+        elif ((mileage_difference) > 1500):
+            print("Your entered kilometers exceed 1500km.")
+            print("Are you sure this is the correct value for one trip?")
+            continue
+        else:
+            print("Thank you. Your driven kilometers were added to the system.")
+            break
+
+validate_current_mileage()

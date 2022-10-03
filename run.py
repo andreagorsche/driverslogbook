@@ -28,12 +28,18 @@ data = logbook.get_all_values()
 # import Python RegEx
 import re
 
-# define valid numberplate with Reg Ex
-num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
-valid_aut = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
+def validate_plate():
+    """
+    validating the length and the type of the number plate
+    the regular Austrian plate type is: Letters, Numbers, Letters
+    the custom Austrian plate type is: Letters, Letters, Numbers
+    the characters for each type (regular and custom) are 8 (min) to 10 (max) including two dashes
+    """
+    num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
+    valid_aut = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
 
-if valid_aut:
-    print("The number plate is of regular format. Entry correct.")
-else:
-    print("invalid entry, please try again")
+    if valid_aut:
+        print("The number plate is of regular format. Entry correct.")
+    else:
+        print("invalid entry, please try again")
 

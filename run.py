@@ -30,7 +30,7 @@ import re
 
 # define valid numberplate with Reg Ex
 NUM_PLATE = input("Please enter your number plate (e.g. G-60-CYD):")
-VALID_AUT = re.search("[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
+VALID_AUT = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
 
 if VALID_AUT:
     print("The number plate is of regular format. Entry correct.")

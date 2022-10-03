@@ -29,10 +29,10 @@ data = logbook.get_all_values()
 import re
 
 # define valid numberplate with Reg Ex
-NUM_PLATE = input("Please enter your number plate (e.g. G-60-CYD):")
-VALID_AUT = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
+num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
+valid_aut = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", NUM_PLATE)
 
-if VALID_AUT:
+if valid_aut:
     print("The number plate is of regular format. Entry correct.")
 else:
     print("invalid entry, please try again")

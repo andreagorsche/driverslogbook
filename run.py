@@ -112,3 +112,22 @@ def check_valid_date():
             continue
 
 check_valid_date()
+
+def validate_travel_purpose():
+    """
+    validate that user entered either business or private as travel purpose
+    """
+    while True:
+        travel_purpose = input("Please enter the purpose of your travel (private or business):")
+        if (travel_purpose == "business"):
+            print("Your travel purpose is business. Thanks for the data entry.")
+            break
+        elif (travel_purpose == "private"):
+            print("Your travel purpose is private. Thank you for the data entry.")
+            break
+        else:
+            print(f"You entered {travel_purpose}. That is not a correct data entry.")
+            print("Please make sure your travel purpose is either business or private.")
+            continue
+
+validate_travel_purpose()

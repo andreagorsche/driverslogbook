@@ -35,16 +35,19 @@ def validate_plate():
     the custom Austrian plate type is: Letters, Letters, Numbers
     the characters for each type (regular and custom) are 8 (min) to 10 (max) including two dashes
     """
-    num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
-    valid_aut_1 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", num_plate)
-    valid_aut_2 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[A-Z]{1,5}-[0-9]{1,5}$", num_plate)
+   while True:
+        num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
+        valid_aut_1 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", num_plate)
+        valid_aut_2 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[A-Z]{1,5}-[0-9]{1,5}$", num_plate)
 
-
-    if valid_aut_1:
-        print("The number plate is of regular format. Entry correct.")
-    elif valid_aut_2:
-        print("The number plate is a custom plate. Entry correct.")
-    else:
-        print("invalid entry, please try again")
+        if valid_aut_1:
+            print("The number plate is of regular format. Entry correct.")
+            break
+        elif valid_aut_2:
+            print("The number plate is a custom plate. Entry correct.")
+            break
+        else:
+            print("invalid entry, please try again")
+            continue
 
 validate_plate()

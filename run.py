@@ -30,8 +30,9 @@ num_plate = 0
 initial_mileage = 0
 current_mileage = 0
 date_input = 0
+journey = 0
 travel_purpose = 0
-input_array = [num_plate, initial_mileage, current_mileage, date_input, travel_purpose]
+input_data = [num_plate, initial_mileage, current_mileage, date_input, journey, travel_purpose]
 
 # import Python RegEx
 import re
@@ -111,6 +112,19 @@ def check_valid_date():
             print("Please try again")
             continue
 
+def validate_journey():
+    """
+    validate that user entered a from and to destination
+    """  
+    while True:
+        journey = input("Please enter your start city and destination (e.g.Vienna-Salzburg):")
+        valid_journey = re.search("[A-Z]{2,20}-[A-Z]{2,20}$", num_plate)
+        if valid_journey:
+            print("The entered journey is of correct format. Entry logged.")
+            break
+        else:
+            print("invalid entry, please try again")
+            continue
 
 def validate_travel_purpose():
     """
@@ -129,6 +143,17 @@ def validate_travel_purpose():
             print("Please make sure your travel purpose is either business or private.")
             continue
 
+"""
+def update_drivers_logbook(input_data):
+    
+    updates spreadsheet with user input
+
+    print("Updating sales worksheet...\n")
+    sales_worksheet = SHEET.worksheet("logbook")
+    sales_worksheet.append_row(input_data)
+    print("Sales worksheet updated successfully.\n")    
+"""
+
 def main():
     """
     Run all program functions
@@ -137,6 +162,7 @@ def main():
     validate_initial_mileage()
     validate_current_mileage(initial_mileage)
     check_valid_date()
+    validate_journey()
     validate_travel_purpose()
 
 print("Welcome to the drivers logbook.")

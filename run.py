@@ -20,7 +20,7 @@ SHEET = GSPREAD_CLIENT.open('drivers_logbook')
 # Access data in the logbook worksheet
 logbook = SHEET.worksheet('logbook')
 
-#get and print all values from the logbook worksheet
+# get and print all values from the logbook worksheet
 data = logbook.get_all_values() 
 
 # defining input array
@@ -40,7 +40,7 @@ def validate_plate():
     validating the length and the type of the number plate
     the regular Austrian plate type is: Letters, Numbers, Letters
     the custom Austrian plate type is: Letters, Letters, Numbers
-    the characters for each type (regular and custom) are 8 (min) to 10 (max) including two dashes
+    the characters for each type are 8 (min) to 10 (max) including two dashes
     """
     while True:
         num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
@@ -68,8 +68,9 @@ def validate_initial_mileage():
         print("This is an unusual high value. Are you sure this is correct?")
     else:
         print("Thank you for your data entry.")
+        return initial_mileage
 
-def validate_current_mileage():
+def validate_current_mileage(initial_mileage):
     """   
     validate if current total mileage is bigger than initial mileage
     validate if driven kilometers are manageable within a day
@@ -116,7 +117,7 @@ def validate_journey():
     """  
     while True:
         journey = input("Please enter your start city and destination (e.g.Vienna-Salzburg):")
-        valid_journey = re.search("[A-Z]{2,20}-[A-Z]{2,20}$", num_plate)
+        valid_journey = re.search("[A-Z]{2,20}-[A-Z]{2,20}$", journey)
         if valid_journey:
             print("The entered journey is of correct format. Entry logged.")
             break

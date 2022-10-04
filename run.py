@@ -25,6 +25,14 @@ logbook = SHEET.worksheet('logbook')
 #get and print all values from the logbook worksheet
 data = logbook.get_all_values() 
 
+# defining input array
+num_plate = 0
+initial_mileage = 0
+current_mileage = 0
+date_input = 0
+travel_purpose = 0
+input_array = [num_plate, initial_mileage, current_mileage, date_input, travel_purpose]
+
 # import Python RegEx
 import re
 
@@ -50,23 +58,17 @@ def validate_plate():
             print("invalid entry, please try again")
             continue
 
-validate_plate()
-
-initial_mileage = float(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
-
 def validate_initial_mileage():
     """
     validate if initial mileage input is reasonable
     more than 200.000 kilometers are unlikely
     """
+    initial_mileage = float(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
     if initial_mileage > 200000:
         print(f"Your initial mileage is {initial_mileage}")
         print("This is an unusual high value. Are you sure this is correct?")
     else:
         print("Thank you for your data entry.")
-    
-validate_initial_mileage()
-
 
 def validate_current_mileage():
     """   
@@ -89,8 +91,6 @@ def validate_current_mileage():
             print("Thank you. Your driven kilometers were added to the system.")
             break
 
-validate_current_mileage()
-
 #import datetime to validate date entry
 
 from datetime import datetime
@@ -111,7 +111,6 @@ def check_valid_date():
             print("Please try again")
             continue
 
-check_valid_date()
 
 def validate_travel_purpose():
     """
@@ -130,4 +129,15 @@ def validate_travel_purpose():
             print("Please make sure your travel purpose is either business or private.")
             continue
 
-validate_travel_purpose()
+def main():
+    """
+    Run all program functions
+    """
+    validate_plate()
+    validate_initial_mileage()
+    validate_current_mileage(initial_mileage)
+    check_valid_date()
+    validate_travel_purpose()
+
+print("Welcome to the drivers logbook.")
+main()

@@ -1,6 +1,10 @@
 # Imports to connect google sheets with python program
 import gspread
 from google.oauth2.service_account import Credentials
+from datetime import datetime
+# import Python RegEx
+import re
+
 
 # Scope lists the APIs that the program should access in order to run.
 SCOPE = [
@@ -16,32 +20,19 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 
 # Access the google sheet drivers log book
 SHEET = GSPREAD_CLIENT.open('drivers_logbook')
-
 # Access data in the logbook worksheet
 logbook = SHEET.worksheet('logbook')
-
 # get and print all values from the logbook worksheet
 data = logbook.get_all_values() 
 
-# defining input array
-num_plate = 0
-initial_mileage = 0
-current_mileage = 0
-date_input = 0
-journey = 0
-travel_purpose = 0
-input_data = [num_plate, initial_mileage, current_mileage, date_input, journey, travel_purpose]
-
-# import Python RegEx
-import re
-
-def validate_plate():
+def take_plate_input():
     """
     validating the length and the type of the number plate
     the regular Austrian plate type is: Letters, Numbers, Letters
     the custom Austrian plate type is: Letters, Letters, Numbers
     the characters for each type are 8 (min) to 10 (max) including two dashes
     """
+    num_plate = 0
     while True:
         num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
         valid_aut_1 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$", num_plate)
@@ -56,8 +47,9 @@ def validate_plate():
         else:
             print("invalid entry, please try again")
             continue
+    return num_plate
 
-def validate_initial_mileage():
+def take_initial_mileage_input():
     """
     validate if initial mileage input is reasonable
     more than 200.000 kilometers are unlikely
@@ -66,11 +58,12 @@ def validate_initial_mileage():
     if initial_mileage > 200000:
         print(f"Your initial mileage is {initial_mileage}")
         print("This is an unusual high value. Are you sure this is correct?")
+        return take_initial_mileage_input()
     else:
         print("Thank you for your data entry.")
         return initial_mileage
 
-def validate_current_mileage(initial_mileage):
+def take_current_mileage_input(initial_mileage):
     """   
     validate if current total mileage is bigger than initial mileage
     validate if driven kilometers are manageable within a day
@@ -89,13 +82,9 @@ def validate_current_mileage(initial_mileage):
             continue
         else:
             print("Thank you. Your driven kilometers were added to the system.")
-            break
+            return current_mileage
 
-#import datetime to validate date entry
-
-from datetime import datetime
-
-def check_valid_date():
+def take_travel_date_input():
     """
     check if entered date is in the format dd/mm/yyyy
     """
@@ -104,8 +93,13 @@ def check_valid_date():
     while True:
         try:
             travel_date = datetime.strptime(date_input, format_ddmmyyyy)
-            print("The string is a date with format " + format_ddmmyyyy)
-            break
+            travel_date_year = travel_date.year
+            if travel_date_year > 2000:
+                print("The string is a date with format " + format_ddmmyyyy)
+                return travel_date
+            else:
+                print("The date is too old. Enter recent date")
+                continue
         except ValueError:
             print("The string is not a date with format " + format_ddmmyyyy)
             print("Please try again")
@@ -120,7 +114,7 @@ def validate_journey():
         valid_journey = re.search("[A-Z]{2,20}-[A-Z]{2,20}$", journey)
         if valid_journey:
             print("The entered journey is of correct format. Entry logged.")
-            break
+            return journey
         else:
             print("invalid entry, please try again")
             continue
@@ -131,37 +125,41 @@ def validate_travel_purpose():
     """
     while True:
         travel_purpose = input("Please enter the purpose of your travel (private or business):")
-        if (travel_purpose == "business"):
-            print("Your travel purpose is business. Thanks for the data entry.")
-            break
-        elif (travel_purpose == "private"):
-            print("Your travel purpose is private. Thank you for the data entry.")
-            break
+        if (travel_purpose == "business" or travel_purpose == "private"):
+            print(f"Your travel purpose is {travel_purpose}. Thanks for the data entry.")
+            return travel_purpose
         else:
             print(f"You entered {travel_purpose}. That is not a correct data entry.")
             print("Please make sure your travel purpose is either business or private.")
             continue
 
-"""
-def update_drivers_logbook(input_data):
-    
+
+def update_drivers_logbook(input_data):    
     updates spreadsheet with user input
     print("Updating sales worksheet...\n")
     sales_worksheet = SHEET.worksheet("logbook")
     sales_worksheet.append_row(input_data)
     print("Sales worksheet updated successfully.\n")    
-"""
+
+
+
+def take_data_input():
+    num_plate = take_plate_input()
+    initial_mileage = take_initial_mileage_input()
+    current_mileage = take_current_mileage_input(initial_mileage)
+    travel_date = take_travel_date_input()
+    journey = validate_journey()
+    travel_purpose = validate_travel_purpose()
+    input_data = [num_plate, initial_mileage, current_mileage, travel_date, journey, travel_purpose]
+    return input_data
+
 
 def main():
     """
     Run all program functions
     """
-    validate_plate()
-    validate_initial_mileage()
-    validate_current_mileage(initial_mileage)
-    check_valid_date()
-    validate_journey()
-    validate_travel_purpose()
+    print("Welcome to the drivers logbook.")
+    input_data = take_data_input()
+    update_drivers_logbook(input_data)
 
-print("Welcome to the drivers logbook.")
 main()

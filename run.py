@@ -137,8 +137,8 @@ def validate_travel_purpose():
 def update_drivers_logbook(input_data):    
     updates spreadsheet with user input
     print("Updating sales worksheet...\n")
-    sales_worksheet = SHEET.worksheet("logbook")
-    sales_worksheet.append_row(input_data)
+    logbook_worksheet = SHEET.worksheet("logbook")
+    logbook_worksheet.append_row(input_data)
     print("Sales worksheet updated successfully.\n")    
 
 

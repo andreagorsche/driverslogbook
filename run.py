@@ -2,8 +2,8 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import date
-# import Python RegEx
 import re
+import numpy as np
 
 
 # Scope lists the APIs that the program should access in order to run.
@@ -54,7 +54,7 @@ def take_initial_mileage_input():
     validate if initial mileage input is reasonable
     more than 200.000 kilometers are unlikely
     """
-    initial_mileage = float(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
+    initial_mileage = int(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
     if initial_mileage > 200000:
         print(f"Your initial mileage is {initial_mileage}")
         print("This is an unusual high value. Are you sure this is correct?")
@@ -70,7 +70,7 @@ def take_current_mileage_input(initial_mileage):
     (assumption that one will most likely not drive more than 1500 kilometer a day)
     """  
     while True:
-        current_mileage = float(input("Please enter your total mileage after your recent ride:"))
+        current_mileage = int(input("Please enter your total mileage after your recent ride:"))
         mileage_difference = current_mileage - initial_mileage
         if  ((mileage_difference) < 0):
             print("Your total mileage after your trip is smaller than before.")
@@ -85,25 +85,25 @@ def take_current_mileage_input(initial_mileage):
             return current_mileage
  
 def take_travel_date_input():
-        date_input = input("Please enter your travel date (format: dd/mm/yyyy):")
-        travel_date = date_input.split('/')
-        travel_date = [int (i) for i in travel_date]
-        day = travel_date[0]
-        month = travel_date[1]
-        year = travel_date[2]
-        print(day)
-        print(month)
-        print(year)
-        while True:
-            if (day>0 and day<32):
-                return day
-                if (month>0 and month<13):
-                    return month
-                    if(year > 2016 and year < 2023):
-                        print("Date entry is correct.")
-                        return year
+    """
+    convert list of string into list of int
+    within the while loop it is checked if the date input is valid
+    """
+    date_input = input("Please enter your travel date (format: yyyy/mm/dd):")
+    date_list = date_input.split('/')
+    date_list = [int (i) for i in date_list]
+    year = date_list[0]
+    month = date_list[1]
+    day = date_list[2]
+    while True:
+        if(year > 2016 and year < 2023):
+            if (month>0 and month<13):
+                if (day>0 and day<32):
+                    print("Date entry is correct.")
+                    return date_list
             else:
                 print("Your entered date is not correct. Please try again.")
+                continue
        
 def validate_journey():
     """
@@ -135,15 +135,17 @@ def validate_travel_purpose():
 
 
 def take_data_input():
+    """
+    Calling all data input functions and returning the variable input_data
+    """
     num_plate = take_plate_input()
     initial_mileage = take_initial_mileage_input()
     current_mileage = take_current_mileage_input(initial_mileage)
-    year = take_travel_date_input(year)
-    month = take_travel_date_input(month)
-    day = take_travel_date_input(day)
+    date_list = (take_travel_date_input())
     journey = validate_journey()
     travel_purpose = validate_travel_purpose()
-    input_data = [num_plate, initial_mileage, current_mileage, year, month, day, journey, travel_purpose]
+    input_list = [num_plate, initial_mileage, current_mileage, date_list, journey, travel_purpose]
+    input_data = [input_list[0], input_list[1], input_list[2], input_list[3][0], input_list[3][1], input_list[3][2], input_list[4],input_list[5]]
     return input_data
 
 def update_drivers_logbook(input_data):    
@@ -163,7 +165,6 @@ def main():
     print("Welcome to the drivers logbook.")
     input_data = take_data_input()
     new_row = update_drivers_logbook(input_data)
-    print("New data entry of driver's logbook entered successfully.")
     print(new_row)
 
 main()

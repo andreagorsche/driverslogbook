@@ -1,7 +1,7 @@
 # Imports to connect google sheets with python program
 import gspread
 from google.oauth2.service_account import Credentials
-from datetime import datetime
+from datetime import date
 # import Python RegEx
 import re
 
@@ -83,35 +83,35 @@ def take_current_mileage_input(initial_mileage):
         else:
             print("Thank you. Your driven kilometers were added to the system.")
             return current_mileage
-
+ 
 def take_travel_date_input():
-    """
-    check if entered date is in the format dd/mm/yyyy
-    """
-    date_input = input("Please enter your travel date (format: dd/mm/yyyy):")
-    format_ddmmyyyy = "%d/%m/%Y"
-    while True:
-        try:
-            travel_date = datetime.strptime(date_input, format_ddmmyyyy)
-            travel_date_year = travel_date.year
-            if travel_date_year > 2000:
-                print("The string is a date with format " + format_ddmmyyyy)
-                return travel_date
+        date_input = input("Please enter your travel date (format: dd/mm/yyyy):")
+        travel_date = date_input.split('/')
+        travel_date = [int (i) for i in travel_date]
+        day = travel_date[0]
+        month = travel_date[1]
+        year = travel_date[2]
+        print(day)
+        print(month)
+        print(year)
+        while True:
+            if (day>0 and day<32):
+                return day
+                if (month>0 and month<13):
+                    return month
+                    if(year > 2016 and year < 2023):
+                        print("Date entry is correct.")
+                        return year
             else:
-                print("The date is too old. Enter recent date")
-                continue
-        except ValueError:
-            print("The string is not a date with format " + format_ddmmyyyy)
-            print("Please try again")
-            continue
-
+                print("Your entered date is not correct. Please try again.")
+       
 def validate_journey():
     """
     validate that user entered a from and to destination
     """  
     while True:
         journey = input("Please enter your start city and destination (e.g.Vienna-Salzburg):")
-        valid_journey = re.search("[A-Z]{2,20}-[A-Z]{2,20}$", journey)
+        valid_journey = re.search("[A-Za-z]{2,20}-[A-Za-z]{2,20}$", journey)
         if valid_journey:
             print("The entered journey is of correct format. Entry logged.")
             return journey
@@ -134,25 +134,27 @@ def validate_travel_purpose():
             continue
 
 
-def update_drivers_logbook(input_data):    
-    updates spreadsheet with user input
-    print("Updating sales worksheet...\n")
-    logbook_worksheet = SHEET.worksheet("logbook")
-    logbook_worksheet.append_row(input_data)
-    print("Sales worksheet updated successfully.\n")    
-
-
-
 def take_data_input():
     num_plate = take_plate_input()
     initial_mileage = take_initial_mileage_input()
     current_mileage = take_current_mileage_input(initial_mileage)
-    travel_date = take_travel_date_input()
+    year = take_travel_date_input(year)
+    month = take_travel_date_input(month)
+    day = take_travel_date_input(day)
     journey = validate_journey()
     travel_purpose = validate_travel_purpose()
-    input_data = [num_plate, initial_mileage, current_mileage, travel_date, journey, travel_purpose]
+    input_data = [num_plate, initial_mileage, current_mileage, year, month, day, journey, travel_purpose]
     return input_data
 
+def update_drivers_logbook(input_data):    
+    """
+    updates spreadsheet with user input
+    """
+    print("Updating driver's logbook...\n")
+    drivers_logbook_worksheet = SHEET.worksheet("logbook")
+    drivers_logbook_worksheet.append_row(input_data)
+    print("Driver's logbook updated successfully.\n")  
+    return input_data
 
 def main():
     """
@@ -160,6 +162,8 @@ def main():
     """
     print("Welcome to the drivers logbook.")
     input_data = take_data_input()
-    update_drivers_logbook(input_data)
+    new_row = update_drivers_logbook(input_data)
+    print("New data entry of driver's logbook entered successfully.")
+    print(new_row)
 
 main()

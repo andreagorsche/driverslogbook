@@ -1,9 +1,8 @@
 # Imports to connect google sheets with python program
 import gspread
 from google.oauth2.service_account import Credentials
-from datetime import date
 import re
-import numpy as np
+import pandas as pd
 
 
 # Scope lists the APIs that the program should access in order to run.
@@ -156,7 +155,24 @@ def update_drivers_logbook(input_data):
     drivers_logbook_worksheet = SHEET.worksheet("logbook")
     drivers_logbook_worksheet.append_row(input_data)
     print("Driver's logbook updated successfully.\n")  
-    return input_data
+    print(input_data)
+
+def get_requested_numplate():
+    print("To calculate your driven kilometers and state subvention")
+    num_plate_request = take_plate_input()
+    return num_plate_request
+
+def get_requested_year():
+    while True:
+        requested_year = int(input("Please also enter the year you are interested in (format: yyyy)"))
+        if(requested_year > 2016 and requested_year < 2023):
+            print("Date entry is correct.")
+            break
+        else:
+            print("The entered year is not correct.")
+            print("It should follow the format yyyy.")
+            print("And it should between 2016 and 2022")
+    return requested_year
 
 def main():
     """
@@ -164,7 +180,9 @@ def main():
     """
     print("Welcome to the drivers logbook.")
     input_data = take_data_input()
-    new_row = update_drivers_logbook(input_data)
-    print(new_row)
-
+    new_row_logbook = update_drivers_logbook(input_data)
+    print(new_row_logbook)
+    num_plate_request = get_requested_numplate()
+    requested_year = get_requested_year()
+   
 main()

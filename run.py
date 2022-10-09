@@ -1,6 +1,8 @@
 # Imports to connect google sheets with python program
 import gspread
 from google.oauth2.service_account import Credentials
+
+#Imports for RegEx and Pandas
 import re
 import pandas as pd
 
@@ -26,10 +28,10 @@ data = logbook.get_all_values()
 
 def take_plate_input():
     """
-    validating the length and the type of the number plate
-    the regular Austrian plate type is: Letters, Numbers, Letters
-    the custom Austrian plate type is: Letters, Letters, Numbers
-    the characters for each type are 8 (min) to 10 (max) including two dashes
+    Validating the length and the type of the number plate
+    The regular Austrian plate type is: Letters, Numbers, Letters
+    The custom Austrian plate type is: Letters, Letters, Numbers
+    The characters for each type are 8 (min) to 10 (max) including two dashes
     """
     num_plate = 0
     while True:
@@ -50,63 +52,73 @@ def take_plate_input():
 
 def take_initial_mileage_input():
     """
-    validate if initial mileage input is reasonable
-    more than 200.000 kilometers are unlikely
+    Validate if initial mileage input is reasonable
+    More than 200.000 kilometers are unlikely
     """
-    initial_mileage = int(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
-    if initial_mileage > 200000:
-        print(f"Your initial mileage is {initial_mileage}")
-        print("This is an unusual high value. Are you sure this is correct?")
-        return take_initial_mileage_input()
-    else:
-        print("Thank you for your data entry.")
-        return initial_mileage
+    while True:
+        try:
+            initial_mileage = int(input("Please enter your initial mileage in kilometers (e.g. 10000):"))
+            if initial_mileage > 200000:
+                print(f"Your initial mileage is {initial_mileage}")
+                print("This is an unusual high value. Are you sure this is correct?")
+                return take_initial_mileage_input()
+            else:
+                print("Thank you for your data entry.")
+                return initial_mileage
+        except ValueError:
+            print("The entered data is not correct. Please try again.")
 
 def take_current_mileage_input(initial_mileage):
     """   
-    validate if current total mileage is bigger than initial mileage
-    validate if driven kilometers are manageable within a day
-    (assumption that one will most likely not drive more than 1500 kilometer a day)
+    Validate if current total mileage is bigger than initial mileage
+    Validate if driven kilometers are manageable within a day
+    (Assumption that one will most likely not drive more than 1500 kilometer a day)
     """  
     while True:
-        current_mileage = int(input("Please enter your total mileage after your recent ride:"))
-        mileage_difference = current_mileage - initial_mileage
-        if  ((mileage_difference) < 0):
-            print("Your total mileage after your trip is smaller than before.")
-            print("Please check your data entry.")
-            continue
-        elif ((mileage_difference) > 1500):
-            print("Your entered kilometers exceed 1500km.")
-            print("Are you sure this is the correct value for one trip?")
-            continue
-        else:
-            print("Thank you. Your driven kilometers were added to the system.")
-            return current_mileage
+        try:
+            current_mileage = int(input("Please enter your total mileage after your recent ride:"))
+            mileage_difference = current_mileage - initial_mileage
+            if  ((mileage_difference) < 0):
+                print("Your total mileage after your trip is smaller than before.")
+                print("Please check your data entry.")
+                continue
+            elif ((mileage_difference) > 1500):
+                print("Your entered kilometers exceed 1500km.")
+                print("Are you sure this is the correct value for one trip?")
+                continue
+            else:
+                print("Thank you. Your driven kilometers were added to the system.")
+                return current_mileage
+        except ValueError:
+            print("The data entry was not correct. Please try again.")
  
 def take_travel_date_input():
     """
-    convert list of string into list of int
-    within the while loop it is checked if the date input is valid
+    Convert list of string into list of int
+    Within the while loop it is checked if the date input is valid
     """
     while True:
-        date_input = input("Please enter your travel date (format: yyyy/mm/dd):")
-        date_list = date_input.split('/')
-        date_list = [int (i) for i in date_list]
-        year = date_list[0]
-        month = date_list[1]
-        day = date_list[2]
-        if(year > 2016 and year < 2023):
-            if (month>0 and month<13):
-                 if (day>0 and day<32):
-                    print("Date entry is correct.")
-                    return date_list
-            else:
-                print("Your entered date is not correct. Please try again.")
-                continue
-       
+        try: 
+            date_input = input("Please enter your travel date (format: yyyy/mm/dd):")
+            date_list = date_input.split('/')
+            date_list = [int (i) for i in date_list]
+            year = date_list[0]
+            month = date_list[1]
+            day = date_list[2]
+            if(year > 2016 and year < 2023):
+                if (month>0 and month<13):
+                    if (day>0 and day<32):
+                        print("Date entry is correct.")
+                        return date_list
+                else:
+                    print("Your entered date is not correct. Please try again.")
+                    continue
+        except ValueError:
+            print("Data entry was not correct. Please try again.")
+
 def validate_journey():
     """
-    validate that user entered a from and to destination
+    Validate that user entered a from and to destination
     """  
     while True:
         journey = input("Please enter your start city and destination (e.g.Vienna-Salzburg):")
@@ -120,7 +132,7 @@ def validate_journey():
 
 def validate_travel_purpose():
     """
-    validate that user entered either business or private as travel purpose
+    Validate that user entered either business or private as travel purpose
     """
     while True:
         travel_purpose = input("Please enter the purpose of your travel (private or business):")
@@ -149,7 +161,7 @@ def take_data_input():
 
 def update_drivers_logbook(input_data):    
     """
-    updates spreadsheet with user input
+    Update spreadsheet with user input
     """
     print("Updating driver's logbook...\n")
     drivers_logbook_worksheet = SHEET.worksheet("logbook")
@@ -158,11 +170,17 @@ def update_drivers_logbook(input_data):
     print(input_data)
 
 def get_requested_numplate():
+    """
+    Get number plate user input for data retrieval
+    """
     print("To calculate your driven kilometers and state subvention")
     num_plate_request = take_plate_input()
     return num_plate_request
 
 def get_requested_year():
+    """
+    Get year user input for data retrieval
+    """
     while True:
         requested_year = int(input("Please also enter the year you are interested in (format: yyyy)"))
         if(requested_year > 2016 and requested_year < 2023):
@@ -175,6 +193,9 @@ def get_requested_year():
     return requested_year
 
 def retrieve_business_rows(num_plate_request, requested_year):
+    """
+    Get only rows that have the entered number plate, the enterd year and the purpose 'business'
+    """
     df = pd.DataFrame(logbook.get_all_records())
     df.head()
     print("Retrieving data...\n")
@@ -183,6 +204,9 @@ def retrieve_business_rows(num_plate_request, requested_year):
     return ret_business_rows
     
 def retrieve_private_rows(num_plate_request, requested_year):
+    """
+    Get only rows that have the entered number plate, the enterd year and the purpose 'private'
+    """
     df = pd.DataFrame(logbook.get_all_records())
     df.head()
     print("Retrieving data...\n")
@@ -191,6 +215,9 @@ def retrieve_private_rows(num_plate_request, requested_year):
     return ret_private_rows
 
 def calc_sum_private_mileage(ret_private_rows, requested_year):
+    """
+    Calculate the sum of the private mileage
+    """
     df = ret_private_rows
     diff_private = df["current mileage"] - df["initial mileage"]
     sum_private = sum(diff_private)
@@ -198,6 +225,9 @@ def calc_sum_private_mileage(ret_private_rows, requested_year):
     return sum_private
 
 def calc_sum_business_mileage(ret_business_rows, requested_year):
+    """
+    Calculate the sum of the business mileage
+    """
     df = ret_business_rows
     diff_business = df["current mileage"] - df["initial mileage"]
     sum_business = sum(diff_business)
@@ -205,6 +235,9 @@ def calc_sum_business_mileage(ret_business_rows, requested_year):
     return sum_business
 
 def calc_state_sub(sum_business):
+    """
+    Calculate the state subvention based on the driven business kilometers.
+    """
     state_sub = sum_business * 0.42
     print(f"For this year you have the right to claim {state_sub} in state subvention.")
     return state_sub
@@ -215,8 +248,8 @@ def main():
     """
     print("Welcome to the drivers logbook.")
     print("Do you want to enter new data or retrieve data?")
-    initial_decision = input("Please answer with e (enter) or r for retrieve:")
     while True:
+        initial_decision = input("Please answer with e (enter) or r for retrieve:")
         if (initial_decision == "e"):
             input_data = take_data_input()
             new_row_logbook = update_drivers_logbook(input_data)

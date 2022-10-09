@@ -88,16 +88,16 @@ def take_travel_date_input():
     convert list of string into list of int
     within the while loop it is checked if the date input is valid
     """
-    date_input = input("Please enter your travel date (format: yyyy/mm/dd):")
-    date_list = date_input.split('/')
-    date_list = [int (i) for i in date_list]
-    year = date_list[0]
-    month = date_list[1]
-    day = date_list[2]
     while True:
+        date_input = input("Please enter your travel date (format: yyyy/mm/dd):")
+        date_list = date_input.split('/')
+        date_list = [int (i) for i in date_list]
+        year = date_list[0]
+        month = date_list[1]
+        day = date_list[2]
         if(year > 2016 and year < 2023):
             if (month>0 and month<13):
-                if (day>0 and day<32):
+                 if (day>0 and day<32):
                     print("Date entry is correct.")
                     return date_list
             else:
@@ -204,6 +204,11 @@ def calc_sum_business_mileage(ret_business_rows, requested_year):
     print(f"In the year {requested_year} you drove {sum_business} kilometers for business purposes.")
     return sum_business
 
+def calc_state_sub(sum_business):
+    state_sub = sum_business * 0.42
+    print(f"For this year you have the right to claim {state_sub} in state subvention.")
+    return state_sub
+
 def main():
     """
     Run all program functions
@@ -224,6 +229,7 @@ def main():
             ret_private_rows = retrieve_private_rows(num_plate_request, requested_year)
             sum_business = calc_sum_business_mileage(ret_business_rows, requested_year)
             sum_private = calc_sum_private_mileage(ret_private_rows, requested_year)
+            state_sub = calc_state_sub(sum_business)
             break
         else:
             print("Sorry. That was not a correct data entry.")

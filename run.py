@@ -178,7 +178,7 @@ def retrieve_business_rows(num_plate_request, requested_year):
     df = pd.DataFrame(logbook.get_all_records())
     df.head()
     print("Retrieving data...\n")
-    ret_business_rows = df.loc[(df['number plate'] == num_plate_request) & df['year'] == requested_year & (df['purpose'] == 'business')]
+    ret_business_rows = df.loc[(df['number plate'] == num_plate_request) & (df['year'] == requested_year) & (df['purpose'] == 'business')]
     print (ret_business_rows)
     return ret_business_rows
     
@@ -195,12 +195,24 @@ def main():
     Run all program functions
     """
     print("Welcome to the drivers logbook.")
-    input_data = take_data_input()
-    new_row_logbook = update_drivers_logbook(input_data)
-    print(new_row_logbook)
-    num_plate_request = get_requested_numplate()
-    requested_year = get_requested_year()
-    business_rows = retrieve_business_rows(num_plate_request, requested_year)
-    private_rows = retrieve_private_rows(num_plate_request, requested_year)
+    print("Do you want to enter new data or retrieve data?")
+    initial_decision = input("Please answer with e (enter) or r for retrieve:")
+    while True:
+        if (initial_decision == "e"):
+            input_data = take_data_input()
+            new_row_logbook = update_drivers_logbook(input_data)
+            print(new_row_logbook)
+            break
+        elif (initial_decision == "r"):
+            num_plate_request = get_requested_numplate()
+            requested_year = get_requested_year()
+            ret_business_rows = retrieve_business_rows(num_plate_request, requested_year)
+            ret_private_rows = retrieve_private_rows(num_plate_request, requested_year)
+            business_mileage = calc_sum_business_mileage(ret_business_rows)
+            break
+        else:
+            print("Sorry. That was not a correct data entry.")
+            print("Please try again.")
+            continue
    
 main()

@@ -190,6 +190,20 @@ def retrieve_private_rows(num_plate_request, requested_year):
     print (ret_private_rows)
     return ret_private_rows
 
+def calc_sum_private_mileage(ret_private_rows, requested_year):
+    df = ret_private_rows
+    diff_private = df["current mileage"] - df["initial mileage"]
+    sum_private = sum(diff_private)
+    print(f"In the year {requested_year} you drove {sum_private} kilometers for private purposes.")
+    return sum_private
+
+def calc_sum_business_mileage(ret_business_rows, requested_year):
+    df = ret_business_rows
+    diff_business = df["current mileage"] - df["initial mileage"]
+    sum_business = sum(diff_business)
+    print(f"In the year {requested_year} you drove {sum_business} kilometers for business purposes.")
+    return sum_business
+
 def main():
     """
     Run all program functions
@@ -208,7 +222,8 @@ def main():
             requested_year = get_requested_year()
             ret_business_rows = retrieve_business_rows(num_plate_request, requested_year)
             ret_private_rows = retrieve_private_rows(num_plate_request, requested_year)
-            business_mileage = calc_sum_business_mileage(ret_business_rows)
+            sum_business = calc_sum_business_mileage(ret_business_rows, requested_year)
+            sum_private = calc_sum_private_mileage(ret_private_rows, requested_year)
             break
         else:
             print("Sorry. That was not a correct data entry.")

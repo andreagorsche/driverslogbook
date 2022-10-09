@@ -174,6 +174,22 @@ def get_requested_year():
             print("And it should between 2016 and 2022")
     return requested_year
 
+def retrieve_business_rows(num_plate_request, requested_year):
+    df = pd.DataFrame(logbook.get_all_records())
+    df.head()
+    print("Retrieving data...\n")
+    ret_business_rows = df.loc[(df['number plate'] == num_plate_request) & df['year'] == requested_year & (df['purpose'] == 'business')]
+    print (ret_business_rows)
+    return ret_business_rows
+    
+def retrieve_private_rows(num_plate_request, requested_year):
+    df = pd.DataFrame(logbook.get_all_records())
+    df.head()
+    print("Retrieving data...\n")
+    ret_private_rows = df.loc[(df['number plate'] == num_plate_request) & (df['year'] == requested_year) & (df['purpose'] == 'private')]
+    print (ret_private_rows)
+    return ret_private_rows
+
 def main():
     """
     Run all program functions
@@ -184,5 +200,7 @@ def main():
     print(new_row_logbook)
     num_plate_request = get_requested_numplate()
     requested_year = get_requested_year()
+    business_rows = retrieve_business_rows(num_plate_request, requested_year)
+    private_rows = retrieve_private_rows(num_plate_request, requested_year)
    
 main()

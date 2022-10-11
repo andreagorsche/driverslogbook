@@ -209,15 +209,19 @@ def get_requested_year():
     Get year user input for data retrieval
     """
     while True:
-        print("Which year are you interested in?")
-        requested_year = int(input("Please enter here (format:yyyy):\n"))
-        if (requested_year > 2015 and requested_year < 2023):
-            print("Date entry is correct.")
-            break
-        else:
-            print("The entered year is not correct.")
-            print("It should follow the format yyyy.")
-            print("And it should between 2016 and 2022")
+        try:
+            print("Which year are you interested in?")
+            requested_year = int(input("Please enter here (format:yyyy):\n"))
+            if (requested_year > 2015 and requested_year < 2023):
+                print("Date entry is correct.")
+                break
+            else:
+                print("The entered year is not correct.")
+                print("It should follow the format yyyy.")
+                print("And it should between 2016 and 2022")
+        except ValueError:
+            print("The entered data is not correct. Please try again.")
+
     return requested_year
 
 

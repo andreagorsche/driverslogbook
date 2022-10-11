@@ -73,6 +73,7 @@ I tested the code of "drivers logbook" extensively regarding wrong data input. I
 * with the initial and current mileage I entered too high and too low values
 * ignoring date conventions (e.g. entering 2023/13/32)
 * when certain data entry was required (like e.g. e or r for enter or retrieval, or private or business) I on purpose entered wrong data.
+I did the manual testing in Gitpod and in Heroku.
 
 ### Automated Testing
 Since the recommended website PEP8online was down at the time of testing, I checked if pycodestyle is installed with my Gitpod and it was. I worked through the probems and got rid of all the indentation issues (mainly spaces missing between functions, 80 characters per line etc.).

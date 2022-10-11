@@ -38,7 +38,7 @@ def take_plate_input():
 
     num_plate = 0
     while True:
-        num_plate = input("Please enter your number plate (e.g. G-60-CYD):")
+        num_plate = input("Please enter your number plate (e.g. G-60-CYD):\n")
         val_at_1 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[0-9]{1,5}-[A-Z]{1,5}$",
                              num_plate)
         val_at_2 = re.search("^(?=.{8,10}$)[A-Z]{1,2}-[A-Z]{1,5}-[0-9]{1,5}$",
@@ -63,7 +63,7 @@ def take_initial_mileage_input():
     """
     try:
         print("Your initial mileage is needed.")
-        initial_mileage = int(input("Please enter in km (e.g 1000):"))
+        initial_mileage = int(input("Please enter in km (e.g 1000):\n"))
         if initial_mileage > 200000:
             print(f"Your initial mileage is {initial_mileage}")
             print("Your value is  unusually high. Please try again?")
@@ -84,7 +84,7 @@ def take_current_mileage_input(initial_mileage):
     while True:
         try:
             print("Your current mileage after your recent drive is needed.")
-            current_mileage = int(input("Please enter in km (e.g 1000):"))
+            current_mileage = int(input("Please enter in km (e.g 1000):\n"))
             mileage_difference = current_mileage - initial_mileage
             if (mileage_difference) < 0:
                 print("The total mileage after your trip")
@@ -110,7 +110,7 @@ def take_travel_date_input():
     while True:
         try:
             print("Your travel date is required.")
-            date_input = input("Please enter the date (format:yyyy/mm/dd):")
+            date_input = input("Please enter the date (format:yyyy/mm/dd):\n")
             date_list = date_input.split('/')
             date_list = [int(i) for i in date_list]
             year = date_list[0]
@@ -135,7 +135,7 @@ def validate_journey():
     """
     while True:
         print("Your start city and destination is required.")
-        journey = input("Please enter data here (e.g.Vienna-Salzburg):")
+        journey = input("Please enter data here (e.g.Vienna-Salzburg):\n")
         valid_journey = re.search("[A-Za-z]{2,20}-[A-Za-z]{2,20}$", journey)
         if valid_journey:
             print("The entered journey is of correct format. Entry logged.")
@@ -152,7 +152,7 @@ def validate_travel_purpose():
     while True:
         print("The purpose of your travel is required.")
         print("Only private or business is allowed as data entry.")
-        travel_purpose = input("Please enter the data here:").lower()
+        travel_purpose = input("Please enter the data here:\n").lower()
         if (travel_purpose == "business" or travel_purpose == "private"):
             print(f"Your travel purpose is {travel_purpose}.")
             print("Thanks for the data entry.")
@@ -207,7 +207,7 @@ def get_requested_year():
     """
     while True:
         print("Which year are you interested in?")
-        requested_year = int(input("Please enter here (format:yyyy):"))
+        requested_year = int(input("Please enter here (format:yyyy):\n"))
         if (requested_year > 2016 and requested_year < 2023):
             print("Date entry is correct.")
             break

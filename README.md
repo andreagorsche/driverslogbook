@@ -30,7 +30,7 @@ When choosing to enter new data, the user is asked to enter the following inform
 
 The list of data is then entered into a Google spreadsheet that`s connected to the software through gspread.
 
-![update of drivers logbook](/images/update_driverslogbook.png)
+![update of drivers logbook](/images/logbook_update.png)
 
 
 ### Retrieving existing data

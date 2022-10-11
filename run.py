@@ -27,6 +27,7 @@ data = logbook.get_all_values()
 # state subvention constant for Austria in Euro
 STATE_SUB_AT = 0.42
 
+
 def take_plate_input():
 
     """
@@ -65,7 +66,7 @@ def take_initial_mileage_input():
         initial_mileage = int(input("Please enter in km (e.g 1000):\n"))
         if initial_mileage < 0:
             print(f"Your initial mileage is {initial_mileage}")
-            print("Your value is smaller than 0. Please try again?") 
+            print("Your value is smaller than 0. Please try again?")
         elif initial_mileage > 200000:
             print(f"Your initial mileage is {initial_mileage}")
             print("Your value is unusually high. Please try again?")
@@ -210,7 +211,7 @@ def get_requested_year():
     while True:
         print("Which year are you interested in?")
         requested_year = int(input("Please enter here (format:yyyy):\n"))
-        if (requested_year > 2016 and requested_year < 2023):
+        if (requested_year > 2015 and requested_year < 2023):
             print("Date entry is correct.")
             break
         else:
@@ -259,7 +260,6 @@ def calc_sum_private_mileage(ret_private_rows, requested_year):
     sum_private = sum(diff_private)
     print(f"In the year {requested_year} you drove {sum_private}")
     print("kilometers for private purposes.")
-    return sum_private
 
 
 def calc_sum_business_mileage(ret_business_rows, requested_year):
@@ -278,10 +278,9 @@ def calc_state_sub(sum_business):
     """
     Calculate the state subvention based on the driven business kilometers.
     """
-    state_sub = sum_business * STATE_SUB_AT 
+    state_sub = sum_business * STATE_SUB_AT
     print(f"For this year you have the right to claim {state_sub}")
     print("in state subvention.")
-    return state_sub
 
 
 def main():
@@ -291,15 +290,14 @@ def main():
     print("Welcome to the drivers logbook.")
     print("Do you want to enter new data or retrieve data?")
     while True:
-        print("Do you want to enter data or retrieve it?")
         print("Answer with e for enter or r for retrieve.")
         initial_decision = input("Please put your answer here:")
-        if (initial_decision == "e"):
+        if initial_decision == "e":
             input_data = take_data_input()
             new_row_logbook = update_drivers_logbook(input_data)
             print(new_row_logbook)
             break
-        elif (initial_decision == "r"):
+        elif initial_decision == "r":
             num_plate_request = get_requested_numplate()
             requested_year = get_requested_year()
             ret_business_rows = retrieve_business_rows(num_plate_request,
@@ -308,9 +306,8 @@ def main():
                                                      requested_year)
             sum_business = calc_sum_business_mileage(ret_business_rows,
                                                      requested_year)
-            sum_private = calc_sum_private_mileage(ret_private_rows,
-                                                   requested_year)
-            state_sub = calc_state_sub(sum_business)                                       
+            calc_sum_private_mileage(ret_private_rows, requested_year)
+            calc_state_sub(sum_business)
             break
         else:
             print("Sorry. That was not a correct data entry.")

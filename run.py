@@ -283,7 +283,7 @@ def calc_state_sub(sum_business):
     Calculate the state subvention based on the driven business kilometers.
     """
     state_sub = sum_business * STATE_SUB_AT
-    print(f"For this year you have the right to claim {state_sub}")
+    print(f"For this year you have the right to claim {state_sub} Euro")
     print("in state subvention.")
 
 

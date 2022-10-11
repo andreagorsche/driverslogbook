@@ -2,20 +2,22 @@ Welcome to the drivers logbook,
 
 the software logs and retrieves travel data of car drivers for accounting purposes. No matter if a private car is also used for business or a business car is also used for private purposes, a detailed documentation is required. This software is a fast and simple alternative to the tedious task of handwritten documentation in a manual drivers logbook.
 
-![Manual drivers logbook sample](/images/logbook_sample.jpg)
+![Screens of drivers logbook software](/images/screens.png)
 
 ## Target Group: Who is the software 'drivers logbook' for?
 The software was written for approximately 5.1 million car drivers in Austria. This current limitation is due to the number plate check and the calculation of the state subvention for business rides according to Austrian law. 
 The software was written in a way that it can be easily extended to further countries' usage, like e.g. Ireland, US or Germany. 
 The only adaptions needed would be:
 * additional variables for the number plate check with according RegEx criteria of the specific country (e.g. defining the format of Irish or German number plates)
-* exchange of the Austrian state subvention constant for the country-specific subvention - or if such a subvention doesn't exist in the users country, simply disable the state subvention calculation
-Since Germany has similar regulations on business trips by car, the Germans would be the logical next choice for implementation. This would add up the total number of potential users to 53.6 million (48.5 for Germany and 5.1 for Austria). 
+* exchange of the Austrian state subvention constant for the country-specific subvention - or if such a subvention doesn't exist in the users country, simply disable the state subvention calculations.
+Since Germany has similar regulations on business trips by car as Austria, the Germans would be the logical next choice for implementation. This would add up the total number of potential users to 53.6 million (48.5 for Germany and 5.1 for Austria). 
 
 ## Features: What does the software 'drivers logbook' do?
 The software initially welcomes the users and gives them 2 options:
 * enter new data
 * retrieve existing data (from a Google spreadsheet where the entered data was saved to)
+
+![Initial screen drivers logbook](/images/screens.png)
 
 ### Entering new data
 When choosing to enter new data, the user is asked to enter the following information:
@@ -28,24 +30,47 @@ When choosing to enter new data, the user is asked to enter the following inform
 
 The list of data is then entered into a Google spreadsheet that`s connected to the software through gspread.
 
+![update of drivers logbook](/images/update_driverslogbook.png)
+
+
 ### Retrieving existing data
 When choosing to retrieve existing data, the user is asked to enter the following information:
-*number plate the user wants to get information about
-*year the user wants to get information about
+* number plate the user wants to get information about
+* year the user wants to get information about
 
 The data is filtered according to the entered user data. The filtered data is then used to calculate the following information:
-*driven private kilometers in the requested year
-*driven business kilometrs in the requested year
-*state subvention the driver can claim from the state for the driven business kilometers
+* driven private kilometers in the requested year
+* driven business kilometrs in the requested year
+* state subvention the driver can claim from the state for the driven business kilometers
+
+![retrival of data](/images/retrieval_3.png)
+
 
 ### Main Strengths
-A main strength of the software is its data validation. It checks each user input for format requirements and plausibility.
+A main strength of the software is its data validation. It checks each user input for format requirements and plausibility. Thus, guiding the user through the process and simplifying the task of documentation.
 * number plate check: based on the defined RegEx formats the number plates are check for validity. In Austria there are two possible formats that are both considered in this software.
+
+![number plate validation](/images/number_plate_validation.png)
+
 * initial mileage: The software checks if the initial mileage is an integer and if its value is not below 0 or higher than 200000 kilometers. Because a negative mileage does not make sense and a total mileage higher than 200000 is rare. In both cases a faulty data entry is assumed (e.g. due to a typo).
+
+![initial mileage validation](/images/initial_mileage_validation.png)
+
 * current mileage: The software checks if the current mileage is an integer and if its value is not below 0 or higher than 1500 kilometers. Because a negative mileage does not make sense and driving more than 1500 kilometers a day is unlikely. In both cases a faulty data entry is assumed (e.g. due to a typo).
-* travel date: The validation check of the travel date makes sure that the day is a value between 1 and 31, the month is a value between 1 and 12, the year is a value between 2016 and 2022 (because in accounting the last 7 business are relevant) 
+
+![current mileage validation](/images/current_mileage_validation.png)
+
+* travel date: The validation check of the travel date makes sure that the day is a value between 1 and 31, the month is a value between 1 and 12, the year is a value between 2016 and 2022 (because in accounting the last 7 business years are relevant) 
+
+![travel date validation](/images/travel_date_validation.png)
+
 * starting point and destination: RegEx is used to define a minimum and maximum number of characters for the starting point and destination entry. This way it is avoid that other irrelevant string data is entered.
+
+![journey validation](/images/journey_validation.png)
+
 * travel purpose: When entering travel purpose only 2 inputs are allowed: private or business. This is checked in the data validaton.
+
+![travel purpose validation](/images/update_driverslogbook.png)
 
 Another strength of the progam is that the stored data is used to gain new and relevant information for the user. Using a car for different purposes calls for an overview. This is guaranteed through the status report consisting of the sum private and business kilometers driven. Furthermore, the state subvention calculation gives the user additional important information out of the entered data. Otherwise these sums and subvention would have to be calculated manually and this would be much more daunting and time-consuming than using this simple and straight forward software.
 
@@ -60,6 +85,8 @@ The software drivers logbook could gain even more relevance with additional futu
 The software is connected to the Google sheet document drivers logbook. In order to save the input data provided by the user, the list of data is stored in the spreadsheet logbook. Each ride consists of a set of data which is entered as a new row. So each row equals a new ride.
 When retrieving data the user is asked for the number plate and the year. The relevant data is filtered and used for the calculation of total private kilometers, total business kilometers and state subvention.
 
+![Google Spreadsheet for data storage](/images/google_sheet.png)
+
 ### Connecting APIS with Python
 As basis for the software a Google sheets document was created. The headings of the columns equal the data entry required by the software user.
 In order to connect the software with the spreadsheet, APIs for Google drive and Google sheets were created and integrated in the Python code according to the sample walkthrough project "Love Sandwiches" by Code Institute.
@@ -73,10 +100,14 @@ I tested the code of "drivers logbook" extensively regarding wrong data input. I
 * with the initial and current mileage I entered too high and too low values
 * ignoring date conventions (e.g. entering 2023/13/32)
 * when certain data entry was required (like e.g. e or r for enter or retrieval, or private or business) I on purpose entered wrong data.
-I did the manual testing in Gitpod and in Heroku.
+I did the manual testing for both scenarios (data entry and data retrieval) in Gitpod and in Heroku.
+
+![data retrieval testing 1](/images/retrieval_1.png)
+
+![data retrieval testing 2](/images/retrieval_2.png)
 
 ### Automated Testing
-Since the recommended website PEP8online was down at the time of testing, I checked if pycodestyle is installed with my Gitpod and it was. I worked through the probems and got rid of all the indentation issues (mainly spaces missing between functions, 80 characters per line etc.).
+Since the recommended website PEP8online was down at the time of testing, I checked if pycodestyle is installed with my Gitpod and it was. I worked through the errors and probems and got rid of all the indentation issues (mainly spaces missing between functions, 80 characters per line etc.).
 At the time of final check ups there were 8 problems remaining - 3 connected to the gitpod.yml file, 4 connected to the variable name 'df' (a standard name used in pandas) and a "Missing module docstring" which (according to web research doesn't need to be resolved by all means.) There were no errors left just warnings and information. Thus, it was decided to hand the project in, in this current state.
 
 ### Bugs
@@ -93,13 +124,13 @@ The use of RegEx was recommended by my mentor. The major challenge during the de
 The date input was the biggest challenge of all the inputs in this software. First, the datetime import was used but the change to an integer format proofed to be tricky. Intensive research on the web showed that timestamp is usually used for current date and time display. Since the software was not working with the date of today but rather with the date input of the user. What was needed, were integers that were within a certain range (days of a month being between 1 and 31 etc.). Thus, the decision was to not use datetime and instead focus on checking the range of entered integers.
 
 #### Handling nested lists with the collected input
-After having all the input data, the function 'take_data_input()' creates a list of all the data input. This list is then saved in the Google spreadsheet. Since the date input is a list of integers (year, month, day), a nested list was created. After looking through solutions with for loops and list comprehensions my mentor presented the most simply solution: using the asterisk to create flatten the lists and therefore get the data transfered to the Google spreadsheet with out further issues.
+After having all the input data, the function 'take_data_input()' creates a list of all the data input. This list is then saved in the Google spreadsheet as a new row. Since the date input is a list of integers (year, month, day), a nested list was created. After looking through solutions with for loops and list comprehensions, my mentor presented the most simply solution: using the asterisk to flatten the lists and therefore get the data transfered to the Google spreadsheet with out further issues.
 
 #### Filtering relevant data rows from the dataframe
-The created data structure in the Google spreadsheet equals a 2-dimensional matrix. Filtering relevant data rows from the dataframe proved to be a bit challenging at the beginning. Especially because there needed to be 3 requirements met in order for the data row to be relevant. It required some trial and error. Some additional reading on the webpages of W3 schools and statology was very helpful (https://www.w3schools.com/python/pandas/pandas_dataframes.asp, https://www.statology.org/pandas-select-rows-based-on-column-values/)
+The created data structure in the Google spreadsheet equals a 2-dimensional matrix. Filtering relevant data rows from the dataframe proved to be a bit challenging at the beginning. Especially because there needed to be 3 requirements met in order for the data row to be relevant (number plate, year, purpose). It required some trial and error. Some additional reading on the webpages of W3 schools and statology was very helpful (https://www.w3schools.com/python/pandas/pandas_dataframes.asp, https://www.statology.org/pandas-select-rows-based-on-column-values/)
 
 #### Final debugging
-The final debugging was mostly centered around indentation and the 80 characters restriction in line length. Two local variables were created in the main function that turned out to be not needed because they were not needed for further calculations(sum_private and state_sub). Thus only the functions were called instead.
+The final debugging was mostly centered around indentation and the 80 characters restriction in line length. Two local variables were created in the main function that turned out to be not needed because they were not needed for further calculations(sum_private and state_sub). Thus, only the functions were called instead.
 
 ## Deployment
 In order to handle the backend software 'drivers logbook' written in Python, I need the platform Heroku.

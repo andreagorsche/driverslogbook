@@ -299,7 +299,6 @@ def main():
         if initial_decision == "e":
             input_data = take_data_input()
             new_row_logbook = update_drivers_logbook(input_data)
-            print(new_row_logbook)
             break
         elif initial_decision == "r":
             num_plate_request = get_requested_numplate()

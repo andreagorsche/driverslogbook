@@ -35,7 +35,6 @@ def take_plate_input():
     The custom Austrian plate type is: Letters, Letters, Numbers
     The characters for each type are 8 (min) to 10 (max) including two dashes
     """
-
     num_plate = 0
     while True:
         num_plate = input("Please enter your number plate (e.g. G-60-CYD):\n")
@@ -64,9 +63,12 @@ def take_initial_mileage_input():
     try:
         print("Your initial mileage is needed.")
         initial_mileage = int(input("Please enter in km (e.g 1000):\n"))
-        if initial_mileage > 200000:
+        if initial_mileage < 0:
             print(f"Your initial mileage is {initial_mileage}")
-            print("Your value is  unusually high. Please try again?")
+            print("Your value is smaller than 0. Please try again?") 
+        elif initial_mileage > 200000:
+            print(f"Your initial mileage is {initial_mileage}")
+            print("Your value is unusually high. Please try again?")
             return take_initial_mileage_input()
         else:
             print("Thank you for your data entry.")
@@ -86,12 +88,12 @@ def take_current_mileage_input(initial_mileage):
             print("Your current mileage after your recent drive is needed.")
             current_mileage = int(input("Please enter in km (e.g 1000):\n"))
             mileage_difference = current_mileage - initial_mileage
-            if (mileage_difference) < 0:
+            if mileage_difference < 0:
                 print("The total mileage after your trip")
                 print("is smaller than before.")
                 print("Please check your data entry.")
                 continue
-            elif (mileage_difference) > 1500:
+            elif mileage_difference > 1500:
                 print("Your entered kilometers exceed 1500km.")
                 print("Are you sure this is the correct value for one trip?")
                 continue
@@ -116,7 +118,7 @@ def take_travel_date_input():
             year = date_list[0]
             month = date_list[1]
             day = date_list[2]
-            if (year > 2016 and year < 2023):
+            if (year > 2015 and year < 2023):
                 if (month > 0 and month < 13):
                     if (day > 0 and day < 32):
                         print("Date entry is correct.")
